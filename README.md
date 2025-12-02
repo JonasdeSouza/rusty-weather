@@ -31,4 +31,42 @@ A estrutura rígida de tipos do Rust garante que apenas mensagens válidas sejam
   "umidade": 60.0,
   "pressao": 1013.2
 }
+```
+
+## ⚙️ Pré-requisitos (Linux/Ubuntu)
+
+Certifique-se de ter as ferramentas de build e o Broker MQTT instalados:
+```Bash
+
+# Instala compiladores e o Broker Mosquitto
+sudo apt update && sudo apt install build-essential mosquitto mosquitto-clients -y
+
+# Instala o Rust (caso não tenha)
+curl --proto '=https' --tlsv1.2 -sSf [https://sh.rustup.rs](https://sh.rustup.rs) | sh
+```
+
+## ▶️ Como Rodar
+
+  Clone o repositório:
+  
+```bash
+git clone [https://github.com/JonasdeSouza/rusty-weather.git](https://github.com/JonasdeSouza/rusty-weather.git)
+cd rusty-weather
+```
+
+Inicie o Servidor:
+
+```bash
+    cargo run
+```
+  O servidor iniciará em http://localhost:3000 e conectará ao broker MQTT local na porta 1883.
+
+## 🧪 Como Testar (Simulação)
+
+Com o servidor rodando, abra outro terminal para simular um sensor ESP32 enviando dados via mosquitto_pub:
+```bash
+
+mosquitto_pub -h localhost -t sensores/esp32 -m '{"temperatura": 28.5, "umidade": 62.0, "pressao": 1013.5}'
+```
+Acesse http://localhost:3000 e veja os cards atualizarem instantaneamente.
 
