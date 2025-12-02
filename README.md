@@ -50,7 +50,7 @@ curl --proto '=https' --tlsv1.2 -sSf [https://sh.rustup.rs](https://sh.rustup.rs
   Clone o repositório:
   
 ```bash
-git clone [https://github.com/JonasdeSouza/rusty-weather.git](https://github.com/JonasdeSouza/rusty-weather.git)
+git clone https://github.com/JonasdeSouza/rusty-weather.git
 cd rusty-weather
 ```
 
