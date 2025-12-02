@@ -1,0 +1,18 @@
+[package]
+name = "dashboard_iot"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+# O runtime assíncrono. O atributo "full" habilita todas as features (timer, fs, net, etc).
+tokio = { version = "1.0", features = ["full"] }
+
+# Framework Web rápido e ergonômico.
+axum = "0.7"
+
+# Cliente MQTT leve e assíncrono.
+rumqttc = "0.24"
+
+# Framework de serialização/deserialização (padrão de mercado).
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
