@@ -9,8 +9,12 @@ name = "rusty-weather"
 path = "./src/bin/main.rs"
 
 [dependencies]
-esp-bootloader-esp-idf = { version = "0.2.0", features = ["esp32s3"] }
-esp-hal                = { version = "=1.0.0-rc.0", features = ["esp32s3"] }
+anyhow = "1"
+log = "0.4"
+esp-idf-svc = { version = "0.48", features = ["std", "binstart", "experimental"] }
+
+[build-dependencies]
+embuild = "0.31"
 
 critical-section = "1.2.0"
 
