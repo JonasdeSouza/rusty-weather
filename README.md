@@ -1,72 +1,26 @@
 # Rusty Weather Station 🦀
 
+> **Status:** 🟢 Online no Render | 🦀 Backend em Rust | 📡 Protocolo MQTT
+
 Um dashboard IoT em tempo real desenvolvido em **Rust**, focado em alta performance e segurança de memória. O sistema atua como um backend híbrido, processando mensagens MQTT de sensores (simulando um ESP32) e servindo uma interface Web HTTP simultaneamente.
 
-## 🚀 Sobre o Projeto
-
-Este projeto foi desenvolvido como um estudo prático de conceitos avançados de Rust e Engenharia de Software, incluindo:
-- **Concorrência Assíncrona:** Uso de Tasks para processar I/O sem bloquear a CPU.
-- **Ownership & Borrowing:** Gerenciamento seguro de memória sem Garbage Collector.
-- **Estado Compartilhado:** Sincronização segura entre threads usando `Arc<Mutex>`.
+## 🔗 Links Rápidos
+* **Dashboard Online:** [Insira_aqui_seu_link_do_render] (Ex: https://rusty-weather.onrender.com)
+* **Documentação Técnica:** [Link_para_sua_Wiki]
 
 ## 🛠️ Stack Tecnológica
+* **[Tokio](https://tokio.rs/):** Runtime assíncrono.
+* **[Axum](https://github.com/tokio-rs/axum):** Framework Web (Porta 3000).
+* **[Rumqttc](https://github.com/bytebeamio/rumqtt):** Cliente MQTT (Porta 1883).
+* **[Serde](https://serde.rs/):** Serialização JSON segura.
 
-As bibliotecas (crates) mais modernas do ecossistema Rust foram utilizadas:
+## 📡 Arquitetura de Conexão
 
-- **[Tokio](https://tokio.rs/):** Runtime assíncrono (o padrão da indústria).
-- **[Axum](https://github.com/tokio-rs/axum):** Framework Web ergonômico e modular.
-- **[Rumqttc](https://github.com/bytebeamio/rumqtt):** Cliente MQTT leve e robusto.
-- **[Serde](https://serde.rs/):** Framework de serialização/deserialização de alta performance.
+O sistema escuta mensagens em um Broker Público. Qualquer dispositivo (ESP32 ou Terminal) pode enviar dados seguindo estes parâmetros:
 
-## 📡 Modelo de Dados (Protocolo JSON)
-
-O sistema espera receber payloads no formato JSON no tópico `sensores/esp32`.
-A estrutura rígida de tipos do Rust garante que apenas mensagens válidas sejam processadas.
-
-**Exemplo de Payload Válido:**
-
-```json
-{
-  "temperatura": 25.5,
-  "umidade": 60.0,
-  "pressao": 1013.2
-}
-```
-
-## ⚙️ Pré-requisitos (Linux/Ubuntu)
-
-Certifique-se de ter as ferramentas de build e o Broker MQTT instalados:
-```Bash
-
-# Instala compiladores e o Broker Mosquitto
-sudo apt update && sudo apt install build-essential mosquitto mosquitto-clients -y
-
-# Instala o Rust (caso não tenha)
-curl --proto '=https' --tlsv1.2 -sSf [https://sh.rustup.rs](https://sh.rustup.rs) | sh
-```
-
-## ▶️ Como Rodar
-
-  Clone o repositório:
-  
-```bash
-git clone https://github.com/JonasdeSouza/rusty-weather.git
-cd rusty-weather
-```
-
-Inicie o Servidor:
-
-```bash
-    cargo run
-```
-  O servidor iniciará em http://localhost:3000 e conectará ao broker MQTT local na porta 1883.
-
-## 🧪 Como Testar (Simulação)
-
-Com o servidor rodando, abra outro terminal para simular um sensor ESP32 enviando dados via mosquitto_pub:
-```bash
-
-mosquitto_pub -h localhost -t sensores/esp32 -m '{"temperatura": 28.5, "umidade": 62.0, "pressao": 1013.5}'
-```
-Acesse http://localhost:3000 e veja os cards atualizarem instantaneamente.
-
+| Parâmetro | Valor |
+| :--- | :--- |
+| **Broker Host** | `test.mosquitto.org` |
+| **Porta MQTT** | `1883` |
+| **Tópico** | `sensores/rusty_weather/unb_211068459` |
+| **Formato** | JSON (`temperatura`, `umidade`, `pressao`) |
