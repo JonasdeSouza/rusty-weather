@@ -7,7 +7,7 @@ use axum::{
 use rumqttc::{MqttOptions, AsyncClient, QoS, Event, Packet};
 use serde::Deserialize;
 use std::{sync::{Arc, Mutex}, time::Duration};
-use chrono::Local; // Biblioteca para data/hora
+use chrono::Local;
 
 // Dados brutos que vêm do sensor
 #[derive(Deserialize, Debug, Clone, Copy)]
@@ -24,27 +24,29 @@ struct Registro {
     horario: String,
 }
 
-// O estado agora é uma LISTA (Vector) de registros
-// Usamos VecDeque seria mais eficiente, mas Vec é mais simples para aprender
+// O estado é uma LISTA (Vector) de registros protegida por Mutex
 type SharedState = Arc<Mutex<Vec<Registro>>>;
 
 #[tokio::main]
 async fn main() {
-    // 1. Inicializa o Estado como uma lista vazia
+    // 1. Inicializa o Estado
     let estado_compartilhado = Arc::new(Mutex::new(Vec::new()));
 
-    // 2. Configuração MQTT
-    let mut mqttoptions = MqttOptions::new("rust-dashboard-history", "localhost", 1883);
+    // 2. Configuração MQTT para a Nuvem (Render)
+    // Usamos o broker público para permitir conexão externa
+    let mut mqttoptions = MqttOptions::new("rust-render-client", "test.mosquitto.org", 1883);
     mqttoptions.set_keep_alive(Duration::from_secs(5));
 
     let (client, mut eventloop) = AsyncClient::new(mqttoptions, 10);
 
+    // Tópico Único e Exclusivo
     client
-        .subscribe("sensores/esp32", QoS::AtLeastOnce)
+        .subscribe("sensores/rusty_weather/unb_211068459", QoS::AtLeastOnce)
         .await
         .unwrap();
 
-    // 3. Loop MQTT
+    // 3. Loop MQTT (Processamento em Background)
+    // IMPORTANTE: O tokio::spawn deve estar DENTRO da main, antes do servidor web travar o processo.
     let estado_para_mqtt = estado_compartilhado.clone();
     
     tokio::spawn(async move {
@@ -55,7 +57,6 @@ async fn main() {
                         if let Ok(dados_sensor) = serde_json::from_slice::<SensorData>(&p.payload) {
                             println!("Recebido: {:?}", dados_sensor);
                             
-                            // Pega a hora atual do sistema formatada
                             let agora = Local::now().format("%H:%M:%S").to_string();
                             
                             let novo_registro = Registro {
@@ -66,9 +67,9 @@ async fn main() {
                             let mut history = estado_para_mqtt.lock().unwrap();
                             history.push(novo_registro);
 
-                            // LÓGICA DE LIMPEZA: Mantém apenas os últimos 10 registros
+                            // Mantém apenas os últimos 10 registros
                             if history.len() > 10 {
-                                history.remove(0); // Remove o mais antigo
+                                history.remove(0);
                             }
                         }
                     }
@@ -81,26 +82,26 @@ async fn main() {
         }
     });
 
-    // 4. Servidor Web
+    // 4. Configuração do Servidor Web
     let app = Router::new()
         .route("/", get(handler_dashboard))
         .with_state(estado_compartilhado);
 
+    // Configuração de Porta para o Render (0.0.0.0:3000)
     let listener = tokio::net::TcpListener::bind("0.0.0.0:3000").await.unwrap();
-    println!("Dashboard com Histórico rodando em http://localhost:3000");
+    println!("Servidor Web rodando na nuvem (Porta 3000)");
+    
     axum::serve(listener, app).await.unwrap();
 }
 
 async fn handler_dashboard(State(state): State<SharedState>) -> Html<String> {
     let history = state.lock().unwrap();
 
-    // Pega o registro mais recente (o último da lista), ou usa valores zerados se estiver vazio
     let atual = history.last().cloned().unwrap_or(Registro {
         dados: SensorData { temperatura: 0.0, umidade: 0.0, pressao: 0.0 },
         horario: "--:--:--".to_string(),
     });
 
-    // Gera as linhas da tabela (HTML) iterando sobre o histórico INVERSO (mais novo primeiro)
     let mut linhas_tabela = String::new();
     for reg in history.iter().rev() {
         linhas_tabela.push_str(&format!(
