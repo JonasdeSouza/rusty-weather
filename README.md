@@ -21,5 +21,4 @@ O sistema escuta mensagens em um Broker Público. Qualquer dispositivo (ESP32 ou
 | :--- | :--- |
 | **Broker Host** | `test.mosquitto.org` |
 | **Porta MQTT** | `1883` |
-| **Tópico** | `sensores/rusty_weather/unb_211068459` |
 | **Formato** | JSON (`temperatura`, `umidade`, `pressao`) |
