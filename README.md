@@ -6,7 +6,6 @@ Um dashboard IoT em tempo real desenvolvido em **Rust**, focado em alta performa
 
 ## 🔗 Links Rápidos
 * **Dashboard Online:** 
-* **Documentação Técnica:** [Link_para_sua_Wiki]
 https://rusty-weather-dashboard.onrender.com/
 ## 🛠️ Stack Tecnológica
 * **[Tokio](https://tokio.rs/):** Runtime assíncrono.
