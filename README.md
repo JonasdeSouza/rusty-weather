@@ -5,9 +5,9 @@
 Um dashboard IoT em tempo real desenvolvido em **Rust**, focado em alta performance e segurança de memória. O sistema atua como um backend híbrido, processando mensagens MQTT de sensores (simulando um ESP32) e servindo uma interface Web HTTP simultaneamente.
 
 ## 🔗 Links Rápidos
-* **Dashboard Online:** [Insira_aqui_seu_link_do_render] (Ex: https://rusty-weather.onrender.com)
+* **Dashboard Online:** 
 * **Documentação Técnica:** [Link_para_sua_Wiki]
-
+https://rusty-weather-dashboard.onrender.com/
 ## 🛠️ Stack Tecnológica
 * **[Tokio](https://tokio.rs/):** Runtime assíncrono.
 * **[Axum](https://github.com/tokio-rs/axum):** Framework Web (Porta 3000).
