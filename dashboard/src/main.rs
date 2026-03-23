@@ -123,7 +123,8 @@ async fn handler_dashboard(State(state): State<SharedState>) -> Html<String> {
             <title>Rusty Weather Station</title>
             <meta http-equiv="refresh" content="3">
             <style>
-                body {{ font-family: sans-serif; background: #f4f4f9; padding: 20px; text-align: center; }}
+                body {{ font-family: sans-serif; background: #e8f5e9; padding: 20px; text-align: center; }}
+                h1 {{ color: #1b5e20; }}
                 .cards {{ display: flex; justify-content: center; gap: 20px; margin-bottom: 40px; }}
                 .card {{ background: white; padding: 20px; border-radius: 10px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); width: 180px; }}
                 .val {{ font-size: 2.5rem; font-weight: bold; margin: 10px 0; }}
@@ -131,7 +132,7 @@ async fn handler_dashboard(State(state): State<SharedState>) -> Html<String> {
                 
                 table {{ margin: 0 auto; border-collapse: collapse; width: 80%; max-width: 600px; background: white; }}
                 th, td {{ padding: 12px; border-bottom: 1px solid #ddd; text-align: center; }}
-                th {{ background-color: #333; color: white; }}
+                th {{ background-color: #2e7d32; color: white; }}
                 tr:nth-child(even) {{ background-color: #f9f9f9; }}
             </style>
         </head>
@@ -140,9 +141,9 @@ async fn handler_dashboard(State(state): State<SharedState>) -> Html<String> {
             <div class="ts">Última atualização: <strong>{}</strong></div>
 
             <div class="cards">
-                <div class="card"><div style="color: #e74c3c">Temp</div><div class="val">{:.1}</div><div>°C</div></div>
-                <div class="card"><div style="color: #3498db">Umid</div><div class="val">{:.1}</div><div>%</div></div>
-                <div class="card"><div style="color: #2ecc71">Press</div><div class="val">{:.1}</div><div>hPa</div></div>
+                <div class="card"><div style="color: #2e7d32">Temp</div><div class="val">{:.1}</div><div>°C</div></div>
+                <div class="card"><div style="color: #388e3c">Umid</div><div class="val">{:.1}</div><div>%</div></div>
+                <div class="card"><div style="color: #43a047">Press</div><div class="val">{:.1}</div><div>hPa</div></div>
             </div>
 
             <h3>Histórico Recente (Últimas 10 leituras)</h3>
